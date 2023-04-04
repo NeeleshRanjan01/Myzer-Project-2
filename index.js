@@ -11,8 +11,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const url = "mongodb+srv://user:user@nex-chatgpt.dzatrnh.mongodb.net/myzer?retryWrites=true&w=majority";
 
-
-
 const responseSchema = new mongoose.Schema({
     welcome_txt: String,
     name: String,
