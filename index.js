@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require("express");
 const cors = require("cors")
+const mongoose = require("mongoose")
 const app = express();
 app.use(cors());
 app.use(express.json())
@@ -10,34 +11,8 @@ app.use(bodyParser.urlencoded({
 }));
 
 // configuring mongoose
-const mongoose = require("mongoose")
-const url = "mongodb+srv://user:user@cluster0.hgk4u38.mongodb.net/?retryWrites=true&w=majority";
-const Schema = mongoose.Schema
-
-const Response = new Schema({
-    welcome_txt: {
-        type: String
-    },
-    name: {
-        type: String
-    },
-    paragraph: {
-        type: String
-    },
-    country: {
-        type: String
-    },
-    description: {
-        type: String
-    }
-})
-
-const ResponseModel = mongoose.model("Myzer", Response)
-
-
-// const mongoose = require("mongoose")
-// const { ResponseModel } = require("./MongSchema")
-// const { url } = require("./MongSchema");
+const { ResponseModel } = require("./MongSchema")
+const { url } = require("./MongSchema");
 
 //post the updated data in database
 
