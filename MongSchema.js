@@ -20,7 +20,7 @@ const Response = new Schema({
     }
 })
 
-const ResponseModel = mongoose.model("Myzer", Response)
+const ResponseModel = mongoose.model("DBData", Response)
 
 module.exports.ResponseModel=ResponseModel;
 module.exports.url=url;
