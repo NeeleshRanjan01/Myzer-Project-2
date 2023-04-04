@@ -13,39 +13,47 @@ app.use(bodyParser.urlencoded({
 const mongoose = require("mongoose")
 const { ResponseModel } = require("./MongSchema")
 const { url } = require("./MongSchema");
+
+// connect to the database
 mongoose.connect(url)
+  .then(() => {
+    console.log('Connected to database')
+  })
+  .catch((error) => {
+    console.log('Error connecting to database:', error)
+  })
 
-//post the updated data in database
+// post the updated data in database
+app.post("/myzer", async (req, res) => {
+  try {
+    let updateData = req.body;
+    await ResponseModel.updateMany(
+      { "_id": "642c00e71a174dbaf285d000" },
+      { $set: updateData })
+    res.send(updateData)
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal server error")
+  }
+})
 
-app.post("/myzer", (async (req, res) => {
-    try {   
-        let updateData = req.body;
-        await ResponseModel.updateMany(
-            { "_id": "642c00e71a174dbaf285d000" },
-            { $set: updateData })
-        res.send(updateData)
-    }
-    catch (error) {
-        console.log(error);
-    }
-}))
+// get data on the UI
+app.get("/", async (req, res) => {
+  try {
+    const stringData = await ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" })
 
-//get data on the UI 
-
-app.get("/", (async (req, res) => {
-    try {
-        const stringData = await ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" })
-
-        var data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
+    var data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
         <h1>name : ${stringData[0].name}</h1><br>
         <h1>paragraph : ${stringData[0].paragraph}</h1><br>
         <h1>country : ${stringData[0].country}</h1><br>
         <h1>description : ${stringData[0].description}</h1><br>`
-        res.send(data)   
-    }
-    catch (error) {
-        console.log(error);
-    } 
-}))
+    res.send(data)
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal server error")
+  }
+})
 
-app.listen(process.env.PORT || 4000)
+app.listen(process.env.PORT || 4000, () => {
+  console.log('Server started on port 4000')
+})
