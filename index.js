@@ -9,7 +9,9 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const url = "mongodb+srv://user:user@cluster0.hgk4u38.mongodb.net/myzer?retryWrites=true&w=majority";
+const url = "mongodb+srv://user:user@nex-chatgpt.dzatrnh.mongodb.net/myzer?retryWrites=true&w=majority";
+
+
 
 const responseSchema = new mongoose.Schema({
     welcome_txt: String,
@@ -26,7 +28,7 @@ app.post("/myzer", async (req, res) => {
     try {
         await mongoose.connect(url);
         const updateData = req.body;
-        await ResponseModel.updateMany({ "_id": "642c580f5a274a327d82bc85" }, { $set: updateData });
+        await ResponseModel.updateMany({ "_id": "642c596c5a274a327d82bc88" }, { $set: updateData });
         res.send(updateData);
     } catch (error) {
         console.log(error);
@@ -38,7 +40,7 @@ app.post("/myzer", async (req, res) => {
 app.get("/", async (req, res) => {
     try {
         await mongoose.connect(url);
-        const stringData = await ResponseModel.find({ "_id": "642c580f5a274a327d82bc85" }).lean();
+        const stringData = await ResponseModel.find({ "_id": "642c596c5a274a327d82bc88" }).lean();
         const data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
                       <h1>name : ${stringData[0].name}</h1><br>
                       <h1>paragraph : ${stringData[0].paragraph}</h1><br>
