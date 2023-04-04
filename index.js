@@ -36,8 +36,8 @@ app.post("/myzer", async (req, res) => {
       res.status(404).send('No document found')
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Internal server error")
+    console.log('Error updating data:', error);
+    res.status(500).send("Internal server error: " + error.message)
   }
 })
 
@@ -56,8 +56,8 @@ app.get("/", async (req, res) => {
       res.status(404).send('No document found')
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Internal server error")
+    console.log('Error getting data:', error);
+    res.status(500).send("Internal server error: " + error.message)
   }
 })
 
