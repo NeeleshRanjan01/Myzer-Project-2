@@ -35,7 +35,9 @@ app.post("/myzer", (async (req, res) => {
 app.get("/", (async (req, res) => {
     try {
         await mongoose.connect(url)
-        const stringData = await ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" }).maxTimeMS(10000);
+        const cursor = ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" })
+        cursor.maxTimeMS(10000)
+        const stringData = await cursor.toArray()
 
         var data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
         <h1>name : ${stringData[0].name}</h1><br>
