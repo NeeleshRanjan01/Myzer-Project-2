@@ -1,54 +1,56 @@
-const bodyParser = require('body-parser');
 const express = require("express");
-const cors = require("cors")
+const cors = require("cors");
+const bodyParser = require('body-parser');
+const mongoose = require("mongoose");
+
 const app = express();
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// configuring mongoose
-const mongoose = require("mongoose")
-const { ResponseModel } = require("./MongSchema")
-const { url } = require("./MongSchema");
+const url = "mongodb+srv://user:user@cluster0.hgk4u38.mongodb.net/myzer?retryWrites=true&w=majority";
 
-//post the updated data in database
+const responseSchema = new mongoose.Schema({
+    welcome_txt: String,
+    name: String,
+    paragraph: String,
+    country: String,
+    description: String
+});
 
-app.post("/myzer", (async (req, res) => {
+const ResponseModel = mongoose.model("Response", responseSchema);
+
+// Post the updated data in database
+app.post("/myzer", async (req, res) => {
     try {
-        await mongoose.connect(url)
-        let updateData = req.body;
-        await ResponseModel.updateMany(
-            { "_id": "642c00e71a174dbaf285d000" },
-            { $set: updateData })
-        res.send(updateData)
-    }
-    catch (error) {
+        await mongoose.connect(url);
+        const updateData = req.body;
+        await ResponseModel.updateMany({ "_id": "642c580f5a274a327d82bc85" }, { $set: updateData });
+        res.send(updateData);
+    } catch (error) {
         console.log(error);
+        res.status(500).send("Internal Server Error");
     }
-}))
+});
 
-//get data on the UI 
-
-app.get("/", (async (req, res) => {
+// Get data on the UI
+app.get("/", async (req, res) => {
     try {
-        await mongoose.connect(url)
-        const cursor = ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" })
-        cursor.maxTimeMS(10000)
-        const stringData = await cursor.toArray()
-
-        var data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
-        <h1>name : ${stringData[0].name}</h1><br>
-        <h1>paragraph : ${stringData[0].paragraph}</h1><br>
-        <h1>country : ${stringData[0].country}</h1><br>
-        <h1>description : ${stringData[0].description}</h1><br>`
-        res.send(data)   
-    }
-    catch (error) {
+        await mongoose.connect(url);
+        const stringData = await ResponseModel.find({ "_id": "642c580f5a274a327d82bc85" }).lean();
+        const data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
+                      <h1>name : ${stringData[0].name}</h1><br>
+                      <h1>paragraph : ${stringData[0].paragraph}</h1><br>
+                      <h1>country : ${stringData[0].country}</h1><br>
+                      <h1>description : ${stringData[0].description}</h1><br>`;
+        res.send(data);
+    } catch (error) {
         console.log(error);
-    } 
-}))
+        res.status(500).send("Internal Server Error");
+    }
+});
 
-app.listen(process.env.PORT || 4000)
+app.listen(process.env.PORT || 4000, () => {
+    console.log("Server is listening on port 4000...");
+});
