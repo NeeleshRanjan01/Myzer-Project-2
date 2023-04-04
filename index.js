@@ -15,7 +15,7 @@ const { ResponseModel } = require("./MongSchema")
 const { url } = require("./MongSchema");
 
 // connect to the database
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, connectTimeoutMS: 30000 })
   .then(() => {
     console.log('Connected to database')
   })
@@ -44,7 +44,7 @@ app.post("/myzer", async (req, res) => {
 // get data on the UI
 app.get("/", async (req, res) => {
   try {
-    const stringData = await ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" })
+    const stringData = await ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" }).timeout(30000)
     if (stringData.length > 0) {
       var data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
           <h1>name : ${stringData[0].name}</h1><br>
