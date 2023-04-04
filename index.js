@@ -32,21 +32,23 @@ const { url } = require("./MongSchema");
 
 //get data on the UI 
 
-// app.get("/", (async (req, res) => {
-//     try {
-//         await mongoose.connect(url)
-//         const stringData = await ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" })
+app.get("/", (async (req, res) => {
+    // try {
+    //     await mongoose.connect(url)
+    //     const stringData = await ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" })
 
-//         var data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
-//         <h1>name : ${stringData[0].name}</h1><br>
-//         <h1>paragraph : ${stringData[0].paragraph}</h1><br>
-//         <h1>country : ${stringData[0].country}</h1><br>
-//         <h1>description : ${stringData[0].description}</h1><br>`
-//         res.send(data)   
-//     }
-//     catch (error) {
-//         console.log(error);
-//     } 
-// }))
+    //     var data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
+    //     <h1>name : ${stringData[0].name}</h1><br>
+    //     <h1>paragraph : ${stringData[0].paragraph}</h1><br>
+    //     <h1>country : ${stringData[0].country}</h1><br>
+    //     <h1>description : ${stringData[0].description}</h1><br>`
+    //     res.send(data)   
+    // }
+    // catch (error) {
+    //     console.log(error);
+    // } 
+
+    res.send("hiiiii")
+}))
 
 app.listen(process.env.PORT || 4000)
