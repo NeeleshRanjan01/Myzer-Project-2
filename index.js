@@ -13,12 +13,12 @@ app.use(bodyParser.urlencoded({
 const mongoose = require("mongoose")
 const { ResponseModel } = require("./MongSchema")
 const { url } = require("./MongSchema");
+mongoose.connect(url)
 
 //post the updated data in database
 
 app.post("/myzer", (async (req, res) => {
-    try {
-        await mongoose.connect(url)
+    try {   
         let updateData = req.body;
         await ResponseModel.updateMany(
             { "_id": "642c00e71a174dbaf285d000" },
@@ -34,7 +34,6 @@ app.post("/myzer", (async (req, res) => {
 
 app.get("/", (async (req, res) => {
     try {
-        await mongoose.connect(url)
         const stringData = await ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" })
 
         var data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
