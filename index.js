@@ -14,53 +14,39 @@ const mongoose = require("mongoose")
 const { ResponseModel } = require("./MongSchema")
 const { url } = require("./MongSchema");
 
-// connect to the database
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, connectTimeoutMS: 30000 })
-  .then(() => {
-    console.log('Connected to database')
-  })
-  .catch((error) => {
-    console.log('Error connecting to database:', error)
-  })
+//post the updated data in database
 
-// post the updated data in database
-app.post("/myzer", async (req, res) => {
-  try {
-    let updateData = req.body;
-    const result = await ResponseModel.updateMany(
-      { "_id": "642c00e71a174dbaf285d000" },
-      { $set: updateData })
-    if (result.nModified > 0) {
-      res.send(updateData)
-    } else {
-      res.status(404).send('No document found')
+app.post("/myzer", (async (req, res) => {
+    try {
+        await mongoose.connect(url)
+        let updateData = req.body;
+        await ResponseModel.updateMany(
+            { "_id": "642c00e71a174dbaf285d000" },
+            { $set: updateData })
+        res.send(updateData)
     }
-  } catch (error) {
-    console.log('Error updating data:', error);
-    res.status(500).send("Internal server error: " + error.message)
-  }
-})
-
-// get data on the UI
-app.get("/", async (req, res) => {
-  try {
-    const stringData = await ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" }).timeout(30000)
-    if (stringData.length > 0) {
-      var data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
-          <h1>name : ${stringData[0].name}</h1><br>
-          <h1>paragraph : ${stringData[0].paragraph}</h1><br>
-          <h1>country : ${stringData[0].country}</h1><br>
-          <h1>description : ${stringData[0].description}</h1><br>`
-      res.send(data)
-    } else {
-      res.status(404).send('No document found')
+    catch (error) {
+        console.log(error);
     }
-  } catch (error) {
-    console.log('Error getting data:', error);
-    res.status(500).send("Internal server error: " + error.message)
-  }
-})
+}))
 
-app.listen(process.env.PORT || 4000, () => {
-  console.log('Server started on port 4000')
-})
+//get data on the UI 
+
+app.get("/", (async (req, res) => {
+    try {
+        await mongoose.connect(url)
+        const stringData = await ResponseModel.find({ "_id": "642c00e71a174dbaf285d000" }).maxTimeMS(10000);
+
+        var data = `<h1>welcome_txt : ${stringData[0].welcome_txt}</h1><br> 
+        <h1>name : ${stringData[0].name}</h1><br>
+        <h1>paragraph : ${stringData[0].paragraph}</h1><br>
+        <h1>country : ${stringData[0].country}</h1><br>
+        <h1>description : ${stringData[0].description}</h1><br>`
+        res.send(data)   
+    }
+    catch (error) {
+        console.log(error);
+    } 
+}))
+
+app.listen(process.env.PORT || 4000)
